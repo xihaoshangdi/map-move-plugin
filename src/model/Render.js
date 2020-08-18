@@ -12,7 +12,8 @@ import L from 'leaflet'
 export const Render = function (Map, ActualPath) {
   const RenderLay = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
   RenderLay.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
-  RenderLay.setAttribute('viewBox', '0 0 1200 1200')
-  L.svgOverlay(RenderLay, ActualPath).addTo(Map)
+  RenderLay.setAttribute('viewBox', '0 0 200 200')
+  RenderLay.setAttribute('style', 'border:1px solid red')
+  L.svgOverlay(RenderLay, L.latLngBounds(...ActualPath)).addTo(Map)
   return RenderLay
 }
