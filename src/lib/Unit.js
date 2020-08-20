@@ -20,19 +20,20 @@ class Unit {
     return LatLngList.map(item => this.#GlobalMap.latLngToLayerPoint(item))
   }
 
-  transition (path) {
+  transition (path, area) {
     const linePath = path.node()
-    console.log(linePath)
+    console.log(area)
     path.transition()
       .duration(7500)
-      .attrTween('stroke-dasharray', () => {
+      .attrTween('fill', () => {
         return function (t) {
           const l = linePath.getTotalLength()
-          console.log(l)
           const interpolate = d3.interpolateString('0,' + l, l + ',' + l)
-          const marker = d3.select('img[title=x125]')
-          const p = linePath.getPointAtLength(t * l)
-          marker.attr('transform', 'translate(' + p.x + ',' + p.y + ')')
+          const marker = d3.select('#marker')
+          // const p = linePath.getPointAtLength(t * l) //实时经纬度
+          const Width = area[0] < 0 ? Math.abs(area[0]) * (1 - t) : area[0] * t
+          const Height = area[1] < 0 ? Math.abs(area[1]) * (1 - t) : area[1] * t
+          marker.attr('transform', 'translate(' + Width + ',' + Height + ')')
           return interpolate(t)
         }
       })
