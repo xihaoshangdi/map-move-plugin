@@ -44,7 +44,7 @@ export const transition = function (path, Width, Height) {
   const d3Path = d3.select(path)
   const linePath = d3Path.node()
   const l = linePath.getTotalLength()
-  const interpolate = d3.interpolateNumber(0, l)
+  const interpolate = d3.interpolate(0, l)
   const cop = (val, time) => {
     if (time > 1) time = 1
     return val < 0 ? Math.abs(val) * (1 - time) : val * time
@@ -54,13 +54,11 @@ export const transition = function (path, Width, Height) {
   d3Path.transition()
     .duration(7500)
     .attr('T', 1)
+    .ease(d3.easeLinear)
     .attrTween('fill', () => {
       return function (t) {
         t = t + Time
         const marker = d3.select('#marker')
-        // Tip
-
-        //
         // const p = linePath.getPointAtLength(t * l) //实时经纬度
         marker.attr('transform', `translate(${cop(Width, t)},${cop(Height, t)})`)
         return interpolate(t)

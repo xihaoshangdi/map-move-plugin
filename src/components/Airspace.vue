@@ -14,6 +14,7 @@
 import { LMap, LTileLayer } from 'vue2-leaflet'
 import L from 'leaflet'
 import { Render, transition } from '@/model/Render'
+import { TipRender } from '@/model/Tip'
 export default {
   components: { LMap, LTileLayer },
   data () {
@@ -42,26 +43,9 @@ export default {
       L.marker(latlngList[1], { color: 'blue' })
         .addTo(map)
         .bindPopup('end').openPopup()
-      // const myIcon = L.divIcon({className: 'my-div-icon'});
-      // const xx=L.marker(latlngList[0], {icon: myIcon}).addTo(map);
-      const xx = L.marker(latlngList[0], { color: 'blue' }).addTo(map)
-      var fx = new L.PosAnimation()
-      let si = null
-      fx.on('end', (e) => {
-        si = 10 - (new Date().getTime() - e.target._startTime) / 1000
-        console.log(si)
-      })
+      // 渲染Tip 动画
+      TipRender(map, [[37.967385, 117.632437], [41.755787, 119.722567]])
 
-      map.on('zoomstart', () => {
-        fx.stop()
-        const Point = L.DomUtil.getPosition(xx._icon)
-        xx.setLatLng(map.layerPointToLatLng(Point))
-      })
-      map.on('zoomend', () => {
-        fx.run(xx._icon, map.latLngToLayerPoint(latlngList[1]), si)
-      })
-
-      fx.run(xx._icon, map.latLngToLayerPoint(latlngList[1]), 7.5)
       // 2. 绘制移动动画
       transition(Line, EndWidth, EndHeight)
 
@@ -84,10 +68,7 @@ export default {
   #Map {
     height: 100vh;
   }
-  .green{
-    background-color: green;
-  }
-  .blue{
-    background-color: blue;
+  .zzz{
+    background: rgba(0,0,0,0.3);
   }
 </style>
