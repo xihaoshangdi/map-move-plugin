@@ -51,7 +51,6 @@ export const TipRender = function (map, trajectory) {
     EndLatLng[1] = EndLatLng[1] + CurrentLatLng.lng - oldLatLng.lng
     // 设置位置
     occupy = new Date().getTime() - start
-    console.log('occupy', occupy)
     Time = Time - occupy / 1000
     fx.run(tip._icon, map.latLngToLayerPoint(EndLatLng), Time)
   })
