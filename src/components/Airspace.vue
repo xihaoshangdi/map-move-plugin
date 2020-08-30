@@ -13,7 +13,7 @@
 <script>
 import { LMap, LTileLayer } from 'vue2-leaflet'
 import { Render, transition } from '@/model/Render'
-import { TipRender } from '@/model/Tip'
+import PromptRender from '@/model/PromptRender'
 export default {
   components: { LMap, LTileLayer },
   data () {
@@ -38,8 +38,11 @@ export default {
       const EndHeight = -StartHeight
       // 1. 渲染SVG 绘制SVG区域 Viewbox
       const Line = Render(map, latlngList, StartWidth, StartHeight)
+      //
+      const prompt = new PromptRender(map, latlngList, 7)
+      console.log(prompt)
       // 渲染Tip 动画
-      TipRender(map, [[37.967385, 117.632437], [41.755787, 119.722567]])
+      // TipRender(map, [[37.967385, 117.632437], [41.755787, 119.722567]])
 
       // 2. 绘制移动动画
       transition(Line, EndWidth, EndHeight)
