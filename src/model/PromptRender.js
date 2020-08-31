@@ -51,6 +51,7 @@ export default class PromptRender {
     Prompt.on('dragstart', () => {
       fx.stop()
       const currentPoint = L.DomUtil.getPosition(this.#prompt)
+      console.log('drag', L.DomUtil.getPosition(this.#prompt))
       DragStartLatLng = map.layerPointToLatLng(currentPoint)
     })
     Prompt.on('dragend', () => {
@@ -60,6 +61,8 @@ export default class PromptRender {
       this.#EndLatLng[0] = this.#EndLatLng[0] + currentLatLng.lat - DragStartLatLng.lat
       this.#EndLatLng[1] = this.#EndLatLng[1] + currentLatLng.lng - DragStartLatLng.lng
       this.#AnimationTime = this.#AnimationTime - (currentTime - fxStartTime) / 1000
+      console.log('start', L.DomUtil.getPosition(this.#prompt))
+      console.log('end', map.latLngToLayerPoint(this.#EndLatLng))
       fx.run(this.#prompt, map.latLngToLayerPoint(this.#EndLatLng), this.#AnimationTime)
     })
     // 注册Prompt的缩放事件
