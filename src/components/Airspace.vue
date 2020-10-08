@@ -1,19 +1,19 @@
 <template>
   <l-map
-    ref="Map"
     id="Map"
+    ref="Map"
     :zoom="zoom"
     :center="center"
     @ready="setMapOnReady"
   >
-    <l-tile-layer :url="url"></l-tile-layer>
+    <l-tile-layer :url="url" />
   </l-map>
 </template>
 
 <script>
 import { LMap, LTileLayer } from 'vue2-leaflet'
-import { Render, transition } from '@/model/Render'
-import PromptRender from '@/model/PromptRender'
+import RenderSVG from '@/model/RenderSVG'
+import Animation from '@/model/Animation'
 export default {
   components: { LMap, LTileLayer },
   data () {
@@ -26,37 +26,35 @@ export default {
   },
   methods: {
     setMapOnReady () {
-      const map = this.$refs.Map.mapObject
+      // Test
 
-      // 0. 数据准备
-      const latlngList = [[37.967385, 117.632437], [41.755787, 119.722567]]
-      const StartPoint = map.latLngToLayerPoint(latlngList[0])
-      const EndPoint = map.latLngToLayerPoint(latlngList[1])
-      const StartWidth = StartPoint.x - EndPoint.x
-      const StartHeight = StartPoint.y - EndPoint.y
-      const EndWidth = -StartWidth
-      const EndHeight = -StartHeight
-      // 1. 渲染SVG 绘制SVG区域 Viewbox
-      const Line = Render(map, latlngList, StartWidth, StartHeight)
       //
-      const prompt = new PromptRender(map, latlngList, 7)
-      console.log(prompt)
+      const map = this.$refs.Map.mapObject
+      // 0. 数据准备
+      const latlngList = [[43.755787, 119.722567], [36.755787, 118.722567], [41.755787, 119.722567], [37.967385, 117.632437]]// 路径数组
+      //
+      const render = new RenderSVG(map, latlngList)
+      const Area = render.RenderArea()
+      const Line = render.RenderLine()
+      // 绘制icon,tip
+      render.RenderIcon()
+      //
+      // const prompt = new PromptRender(map, latlngList, 7)
+      // console.log(prompt)
       // 渲染Tip 动画
       // TipRender(map, [[37.967385, 117.632437], [41.755787, 119.722567]])
 
       // 2. 绘制移动动画
-      transition(Line, EndWidth, EndHeight)
-
-      // // 3. 中断
-      // setTimeout(()=>{
-      //   console.log('中断')
-      //   interrupt(Line)
-      // },3000)
-      // // 4. 继续
-      // setTimeout(()=>{
-      //   console.log('继续')
-      //   transition(Line, EndWidth,EndHeight)
-      // },5000)
+      const fx = new Animation(Area)
+      fx.setAnimate(Line, '#marker', 8000)
+      // setTimeout(() => {
+      //   console.log('---')
+      //   fx.interruptAnimate(Line)
+      // }, 2000)
+      //
+      // setTimeout(() => {
+      //   fx.setAnimate(Line, '#marker', 8000)
+      // }, 5000)
     }
   }
 }
